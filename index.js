@@ -1,7 +1,9 @@
 const express=require("express")
 const {connectiondb}=require("./connection")
 const userRouter=require("./routes/url")
+const path=require('path')
 const {Url}=require("./models/url")
+const staticrouter=require('./routes/staticrouter')
 require('dotenv').config();
 
 const app=express()
@@ -9,9 +11,20 @@ const app=express()
 connectiondb(process.env.mongodb).then(()=>console.log("db is connected")).catch(()=>console.log("db connection error"))
 
 app.use(express.json())
+app.use(express.urlencoded({extended:false}))
 app.use("/url",userRouter)
-app.get('/:shortId',async(req,res)=>{
-    const shortId=req.params.shortId
+
+app.set('view engine','ejs')
+app.set('views',path.resolve('./views'))
+
+app.use('/',staticrouter)
+
+app.get('/url/:shortId',async(req,res)=>{
+    const shortId=req.params.shortId 
+    console.log(shortId)
+    if(!shortId){
+        return
+    }
 
   const enter=  await Url.findOneAndUpdate({shortId},{
         $push:{
@@ -20,7 +33,7 @@ app.get('/:shortId',async(req,res)=>{
             }
         }
     }
-        )
+        ) 
         res.redirect(enter.redirecturl)
 
 })

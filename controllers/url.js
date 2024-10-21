@@ -12,7 +12,7 @@ const {Url}=require("../models/url")
         redirecturl:redirecturl,
         visitedcount:[]
     })
-    return res.json(created.shortId)
+    return res.render('home',{id:shortId})
     
  }
  async function handleUrlcounts(req,res){
