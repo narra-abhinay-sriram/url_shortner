@@ -2,8 +2,11 @@ const express=require("express")
 const {connectiondb}=require("./connection")
 const userRouter=require("./routes/url")
 const {Url}=require("./models/url")
+require('dotenv').config();
+
 const app=express()
-connectiondb("mongodb+srv://121sriramreddy:Rohith%404k@cluster0.cdne5.mongodb.net/url_shortner").then(()=>console.log("db is connected")).catch(()=>console.log("db connection error"))
+//console.log(process.env.mongodb)
+connectiondb(process.env.mongodb).then(()=>console.log("db is connected")).catch(()=>console.log("db connection error"))
 
 app.use(express.json())
 app.use("/url",userRouter)
