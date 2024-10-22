@@ -1,6 +1,7 @@
 const express=require("express")
 const {connectiondb}=require("./connection")
-const userRouter=require("./routes/url")
+const urlRouter=require("./routes/url")
+const  userRouter=require("./routes/user")
 const path=require('path')
 const {Url}=require("./models/url")
 const staticrouter=require('./routes/staticrouter')
@@ -12,10 +13,13 @@ connectiondb(process.env.mongodb).then(()=>console.log("db is connected")).catch
 
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
-app.use("/url",userRouter)
+
 
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
+
+app.use("/url",urlRouter)
+app.use("/user",userRouter)
 
 app.use('/',staticrouter)
 
